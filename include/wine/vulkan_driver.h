@@ -46,7 +46,7 @@ struct vulkan_client_object
 #include "wine/rbtree.h"
 
 /* Wine internal vulkan driver version, needs to be bumped upon vulkan_funcs changes. */
-#define WINE_VULKAN_DRIVER_VERSION 35
+#define WINE_VULKAN_DRIVER_VERSION 36
 
 struct vulkan_object
 {
@@ -180,6 +180,7 @@ struct vulkan_driver_funcs
     void (*p_vulkan_surface_detach)(HWND, void *);
     void (*p_vulkan_surface_update)(HWND, void *);
     void (*p_vulkan_surface_presented)(HWND, void *, VkResult);
+    void (*p_vulkan_get_client_rect)(HWND, RECT *);
 
     VkBool32 (*p_vkGetPhysicalDeviceWin32PresentationSupportKHR)(VkPhysicalDevice, uint32_t);
     const char *(*p_get_host_surface_extension)(void);
