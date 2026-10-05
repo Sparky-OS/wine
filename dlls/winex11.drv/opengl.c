@@ -2872,6 +2872,7 @@ static BOOL glxdrv_wglSwapBuffers( HDC hdc )
 
     present_gl_drawable( hwnd, ctx ? ctx->hdc : hdc, gl, !pglXWaitForSbcOML, FALSE );
     update_gl_drawable_size( gl );
+    if (gl->window) sync_stereo_declaration( hwnd, gl->window );
     release_gl_drawable( gl );
     return TRUE;
 }
