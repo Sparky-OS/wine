@@ -1809,6 +1809,66 @@ static void sync_window_position( struct x11drv_win_data *data, UINT swp_flags, 
 
 
 /***********************************************************************
+ *		get_cardinal_property
+ */
+static BOOL get_cardinal_property( Window window, Atom atom, long *value )
+{
+    Atom type;
+    int format;
+    unsigned long count, remaining;
+    unsigned char *data;
+    BOOL ret = FALSE;
+
+    if (XGetWindowProperty( gdi_display, window, atom, 0, 1, False, XA_CARDINAL,
+                            &type, &format, &count, &remaining, &data )) return FALSE;
+    if (type == XA_CARDINAL && format == 32 && count == 1)
+    {
+        *value = *(long *)data;
+        ret = TRUE;
+    }
+    XFree( data );
+    return ret;
+}
+
+
+/***********************************************************************
+ *		get_client_window_rect
+ *
+ * Get the size of the X client window for a window. KWin makes a window that
+ * declares full side by side twice as wide as the Win32 one, and the client
+ * window holds both views.
+ */
+void get_client_window_rect( HWND hwnd, RECT *rect )
+{
+    static int support = -1;
+    struct x11drv_win_data *data;
+    Window root, whole_window = 0;
+    unsigned int width, height, border, depth;
+    int x, y, window_width = 0;
+    long value;
+
+    NtUserGetClientRect( hwnd, rect, NtUserGetDpiForWindow( hwnd ) );
+
+    if (support < 0)
+    {
+        if (!get_cardinal_property( root_window, x11drv_atom(_KDE_NET_WM_STEREO_CONTENT_SUPPORTED), &value )) value = 0;
+        support = value;
+    }
+    if (support < 3) return;
+
+    if ((data = get_win_data( hwnd )))
+    {
+        whole_window = data->whole_window;
+        window_width = data->rects.window.right - data->rects.window.left;
+        release_win_data( data );
+    }
+    if (!whole_window || !get_cardinal_property( whole_window, x11drv_atom(_KDE_NET_WM_STEREO_CONTENT), &value ) || value != 3) return;
+    if (XGetGeometry( gdi_display, whole_window, &root, &x, &y, &width, &height, &border, &depth ))
+        rect->right += width - window_width;
+}
+
+
+/***********************************************************************
  *		sync_client_position
  *
  * Synchronize the X client window position with the Windows one

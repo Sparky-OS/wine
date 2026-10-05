@@ -483,6 +483,8 @@ enum x11drv_atoms
     XATOM_DndSelection,
     XATOM__ICC_PROFILE,
     XATOM__KDE_NET_WM_STATE_SKIP_SWITCHER,
+    XATOM__KDE_NET_WM_STEREO_CONTENT,
+    XATOM__KDE_NET_WM_STEREO_CONTENT_SUPPORTED,
     XATOM__MOTIF_WM_HINTS,
     XATOM__NET_STARTUP_INFO_BEGIN,
     XATOM__NET_STARTUP_INFO,
@@ -674,6 +676,7 @@ extern void update_user_time( Time time );
 extern UINT get_window_net_wm_state( Display *display, Window window );
 extern void make_window_embedded( struct x11drv_win_data *data );
 extern Window create_client_window( HWND hwnd, const XVisualInfo *visual, Colormap colormap );
+extern void get_client_window_rect( HWND hwnd, RECT *rect );
 extern void detach_client_window( struct x11drv_win_data *data, Window client_window );
 extern void attach_client_window( struct x11drv_win_data *data, Window client_window );
 extern void destroy_client_window( HWND hwnd, Window client_window );

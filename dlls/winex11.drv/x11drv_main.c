@@ -125,6 +125,8 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
     "DndSelection",
     "_ICC_PROFILE",
     "_KDE_NET_WM_STATE_SKIP_SWITCHER",
+    "_KDE_NET_WM_STEREO_CONTENT",
+    "_KDE_NET_WM_STEREO_CONTENT_SUPPORTED",
     "_MOTIF_WM_HINTS",
     "_NET_STARTUP_INFO_BEGIN",
     "_NET_STARTUP_INFO",

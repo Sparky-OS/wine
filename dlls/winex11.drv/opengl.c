@@ -1278,7 +1278,7 @@ static void update_gl_drawable_size( struct gl_drawable *gl )
     XWindowChanges changes;
     RECT rect;
 
-    NtUserGetClientRect( gl->hwnd, &rect, NtUserGetDpiForWindow( gl->hwnd ) );
+    get_client_window_rect( gl->hwnd, &rect );
     if (EqualRect( &rect, &gl->rect )) return;
 
     changes.width  = min( max( 1, rect.right ), 65535 );
